@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Galería Virtual — Autodeslizante</title>
+  <link rel="icon" href="https://chalkboardlp.com/img/favicon.png" type="image/x-icon" />
+  <style>
+    :root { --intervalo-ms: 4000; --accent: #9ae6b4; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; background: #004890; color: #fff; font-family: sans-serif;
+      display: flex; flex-direction: column;
+    }
+
+    /* Encabezado */
+    .gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      width: 100%;
+      padding: 12px 20px;
+      background: #111;
+      border-bottom: 2px solid #444;
+      position: relative;
+      z-index: 1000;
+	  background-color: #004890;
+    }
+    .gallery-header img {
+      height: 40px;
+      width: auto;
+    }
+    .gallery-header h1 {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #fff;
+      margin: 0;
+    }
+
+    .wrap { flex: 1; display: grid; }
+    .slider {
+      position: relative; width: 100%; height: 100%; overflow: hidden; background: #1e1e1e;
+    }
+    .slide {
+      position: absolute; inset: 0; opacity: 0; transition: opacity .6s ease;
+      display: flex; flex-direction: column;
+    }
+    .slide.active { opacity: 1; }
+    .slide iframe { flex: 1; width: 100%; height: 100%; border: none; }
+    .slide figcaption {
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff; text-align: center; padding: .5rem; font-size: 1.1rem; font-weight: 500;
+    }
+    .arrows {
+      position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; pointer-events: none; padding: 0 .25rem;
+    }
+    .arrowBtn { pointer-events: auto; background: #0008; border: 1px solid #333; color: #fff; width: 44px; height: 44px; border-radius: .75rem; display: grid; place-items: center; font-size: 20px; cursor: pointer; }
+    .arrowBtn:hover { background: #111a; }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado con logo + título centrado -->
+  <header class="gallery-header">
+    <img src="https://www.upn.edu.co/wp-content/uploads/2025/08/Identidad-UPN-horizontal-blanco-sin-fondo.png" alt="Logo">
+    <h1>Photo Gallery (2025-2)</h1>
+  </header>
+
+  <div class="wrap" aria-label="Galería de fotos con auto-slide">
+    <div class="slider" id="slider" role="region" aria-live="polite">
+      <!-- Diapositivas con iframe y título -->
+      <figure class="slide active" data-index="0">
+        <iframe src="https://drive.google.com/file/d/1-nsqL5vTDoctnFZgaz97s-UFwdqQXdoQ/preview" allowfullscreen loading="eager"></iframe>
+        <figcaption>Absent Smokers</figcaption>
+      </figure>
+      <figure class="slide" data-index="1">
+        <iframe src="https://drive.google.com/file/d/11MY5_dem4bwtKn1XKYCBiVJXeUPDACYp/preview" allowfullscreen loading="lazy"></iframe>
+        <figcaption>Simply Blue</figcaption>
+      </figure>
+      <figure class="slide" data-index="2">
+        <iframe src="https://drive.google.com/file/d/15-d0dY-squDae8ciM9VCHWS0G4E_XVTH/preview" allowfullscreen loading="lazy"></iframe>
+        <figcaption>Color Seats</figcaption>
+      </figure>
+
+      <!-- Flechas laterales -->
+      <div class="arrows">
+        <button class="arrowBtn" id="prevBtn" aria-label="Anterior" title="Anterior (←)">◀</button>
+        <button class="arrowBtn" id="nextBtn" aria-label="Siguiente" title="Siguiente (→)">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    let index = 0;
+    let intervalMs = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--intervalo-ms')) || 4000;
+    let timer = null;
+
+    function setActive(i) {
+      slides.forEach(s => s.classList.remove('active'));
+      slides[i].classList.add('active');
+    }
+    function goTo(i) { index = (i + slides.length) % slides.length; setActive(index); }
+    function next() { goTo(index + 1); }
+    function prev() { goTo(index - 1); }
+    function start() { stop(); timer = setInterval(next, intervalMs); }
+    function stop() { if (timer) clearInterval(timer); timer = null; }
+
+    nextBtn.addEventListener('click', () => { next(); start(); });
+    prevBtn.addEventListener('click', () => { prev(); start(); });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { next(); start(); }
+      if (e.key === 'ArrowLeft') { prev(); start(); }
+    });
+
+    start();
+  </script>
+  
+  <audio id="bg-music" src="https://archive.org/download/1977cantodeunpueblovariosartistas/03%20-%20Mariposas.mp3" loop></audio>
+
+  <!-- Botón de sonido -->
+<button id="soundBtn" style="
+  position: fixed; 
+  top: 10px; right: 10px; 
+  z-index: 2000; 
+  background: #0008; 
+  color: #fff; 
+  border: 1px solid #444; 
+  border-radius: .5rem; 
+  padding: .4rem .7rem;
+  cursor: pointer;
+">
+🔇 Sonido
+</button>
+
+  <script>
+    const music = document.getElementById('bg-music');
+    const soundBtn = document.getElementById('soundBtn');
+    let soundOn = false;
+
+    soundBtn.addEventListener('click', () => {
+      if (!soundOn) {
+        music.play()
+          .then(() => {
+            soundOn = true;
+            soundBtn.textContent = '🔊 Sonido';
+          })
+          .catch(err => console.log('No se pudo reproducir:', err));
+      } else {
+        music.pause();
+        soundOn = false;
+        soundBtn.textContent = '🔇 Sonido';
+      }
+    });
+  </script>
+</body>
+</html>
