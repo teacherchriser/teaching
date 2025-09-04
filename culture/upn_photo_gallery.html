@@ -6,39 +6,55 @@
   <meta name="theme-color" content="#004890">
   <title>UPN Photo Gallery</title>
   <link rel="icon" href="https://chalkboardlp.com/img/favicon.png" type="image/x-icon" />
+  
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+</style>
+
   <style>
     :root { --intervalo-ms: 4000; --accent: #9ae6b4; }
     * { box-sizing: border-box; }
     html, body { height: 100%; }
     body {
-      margin: 0; background: #004890; color: #fff; font-family: sans-serif;
+      margin: 0; background: #004890; color: #fff; font-family: "DM Serif Display", serif;
       display: flex; flex-direction: column;
     }
 
     /* Encabezado */
-    .gallery-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-      width: 100%;
-      padding: 12px 20px;
-      background: #111;
-      border-bottom: 2px solid #444;
-      position: relative;
-      z-index: 1000;
-	  background-color: #004890;
-    }
-    .gallery-header img {
-      height: 40px;
-      width: auto;
-    }
-    .gallery-header h1 {
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: #fff;
-      margin: 0;
-    }
+.gallery-header {
+  display: flex;
+  align-items: center;      /* Centra verticalmente */
+  justify-content: space-between; /* Distribuye a los lados */
+  gap: 15px;
+  width: 100%;
+  padding: 12px 7px;
+  background: #004890;
+  border-bottom: 2px solid #444;
+  position: relative;
+  z-index: 1000;
+}
+
+.gallery-header img {
+  height: 40px;
+  width: auto;
+}
+
+/* Bloque de texto (titulo + subtitulo en horizontal) */
+.header-text {
+  display: flex; 
+  flex-direction: row;   /* 🔹 cambia de columna a fila */
+  gap: 10px;             /* espacio entre título y subtítulo */
+  flex-wrap: wrap;       /* si no cabe, que salte abajo */
+  color: #fff;
+}
+
+.header-text h1, 
+.header-text h4, 
+.header-text p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
 
     .wrap { flex: 1; display: grid; }
     .slider {
@@ -73,11 +89,14 @@
 
   <!-- Encabezado con logo + título centrado -->
   <header class="gallery-header">
-    <img src="https://www.upn.edu.co/wp-content/uploads/2025/08/Identidad-UPN-horizontal-blanco-sin-fondo.png" alt="Logo">
-    <p style="font-size: 17px;">Photo Gallery (2025-2)</p>
+  <img src="https://www.upn.edu.co/wp-content/uploads/2025/08/Identidad-UPN-horizontal-blanco-sin-fondo.png" alt="Logo">
+
+  <div class="header-text">
+    <p style="font-size: 20px">Photo Gallery (2025-2)</p>
 	</br>
-	<h4>Created by: CAI3 Students & Teacher Christian Serrano</h4>
-  </header>
+    <p style="font-size: 9px; color: #1CFF86">Created by: CAI3 Students & Teacher Christian Serrano</p>
+  </div>
+</header>
   
 
 
