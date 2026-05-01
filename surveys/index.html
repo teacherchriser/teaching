@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Encuesta</title>
+</head>
+<body>
+  <h2>Encuesta</h2>
+  <form action="guardar.php" method="POST">
+    <label>Nombre:</label><br />
+    <input type="text" name="nombre" required /><br /><br />
+
+    <label>¿Te gustó el curso?</label><br />
+    <label><input type="radio" name="gusto" value="si" required /> Sí</label><br />
+    <label><input type="radio" name="gusto" value="no" /> No</label><br /><br />
+
+    <button type="submit">Enviar</button>
+  </form>
+</body>
+</html>
